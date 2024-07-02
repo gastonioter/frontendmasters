@@ -1,0 +1,26 @@
+:root {
+  --dark: #293241;
+  --grey-dark: #3d5b81;
+  --grey: #9bc0d9;
+  --withe: #dffbfc;
+  --red: #ee6b4d;
+
+  --mono: "Oxygen mono", monospace;
+  --sans: "Oxygen", sans-serif;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--sans);
+}
+section {
+}
