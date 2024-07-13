@@ -1,0 +1,29 @@
+@import "./base.css";
+
+.home .main__heading {
+  font-size: 8rem;
+  font-family: var(--font-bold);
+}
+
+.home .main__sub-heading {
+  font-size: 4rem;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 10rem;
+}
+@media (width<690px){
+    .home .main__heading{
+        font-size: 4rem;
+    }
+    .home .main__sub-heading{
+        font-size: 2.4rem;
+    }
+    .button-container{
+        flex-wrap: wrap;
+    }
+
+}
