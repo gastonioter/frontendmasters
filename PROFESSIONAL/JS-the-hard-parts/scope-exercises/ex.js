@@ -26,7 +26,7 @@ printHello(); // => should console.log('hello');
 
 // CHALLENGE 3
 function outer() {
-  let counter = 0; // this variable is outside incrementCounter's scope
+  var counter = 0; // this variable is outside incrementCounter's scope
   function incrementCounter() {
     counter++;
     console.log("counter", counter);
@@ -194,8 +194,6 @@ function dateStamp(func) {}
 function censor() {
   const obj = {};
   return function changeScence(first, second) {
-    
-
     if (second != null) {
       obj[first] = second;
       return;
