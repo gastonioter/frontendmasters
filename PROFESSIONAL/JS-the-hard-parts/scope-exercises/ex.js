@@ -69,15 +69,19 @@ addByFour(5); // => should return 9
 
 // CHALLENGE 4
 function once(func) {
-  let output;
+  var output = null;
 
-  return function (num) {
-    if (output == null) {
+  return oncefy;
+
+  function oncefy(num) {
+    var canRun = output == null;
+
+    if (canRun) {
       output = func(num);
       return output;
     }
     return output;
-  };
+  }
 }
 
 // /*** Uncomment these to check your work! ***/
@@ -142,15 +146,21 @@ console.log(rollCaller());
 function saveOutput(func, magicWord) {
   const results = {};
 
-  return function (value) {
+  return saver;
+
+  function saver(value) {
     if (typeof value == "string" && value == magicWord) {
       return results;
     }
 
+    return registerEntry(value);
+  }
+
+  function registerEntry(value) {
     const output = func(value);
     results[value] = output;
     return output;
-  };
+  }
 }
 
 // /*** Uncomment these to check your work! ***/
@@ -164,16 +174,36 @@ console.log(multBy2AndLog("boo")); // => should log { 2: 4, 9: 18 }
 console.log(multBy2AndLog(5)); // => should log 18
 console.log(multBy2AndLog("boo"));
 // CHALLENGE 9
-function cycleIterator(array) {}
+function cycleIterator(array) {
+  var iterator = 0;
+  var lastIndex = array.length - 1;
+
+  console.log(lastIndex);
+
+  return cycle;
+
+  function cycle() {
+    if (iterator > lastIndex) {
+      iterator = 0;
+    }
+
+    var el = array[iterator];
+
+    iterator++;
+
+    return el;
+  }
+}
 
 // /*** Uncomment these to check your work! ***/
-// const threeDayWeekend = ['Fri', 'Sat', 'Sun'];
-// const getDay = cycleIterator(threeDayWeekend);
-// console.log(getDay()); // => should log 'Fri'
-// console.log(getDay()); // => should log 'Sat'
-// console.log(getDay()); // => should log 'Sun'
-// console.log(getDay()); // => should log 'Fri'
-
+const threeDayWeekend = ["Fri", "Sat", "Sun"];
+const getDay = cycleIterator(threeDayWeekend);
+console.log(getDay()); // => should log 'Fri'
+console.log(getDay()); // => should log 'Sat'
+console.log(getDay()); // => should log 'Sun'
+console.log(getDay()); // => should log 'Fri'
+console.log(getDay());
+console.log(getDay());
 // CHALLENGE 10
 function defineFirstArg(func, arg) {}
 
@@ -192,26 +222,50 @@ function dateStamp(func) {}
 
 // CHALLENGE 12
 function censor() {
-  const obj = {};
-  return function changeScence(first, second) {
-    if (second != null) {
-      obj[first] = second;
+  const rules = [];
+
+  return changer;
+
+  function changer(str1, str2) {
+    if (str1 && str2) {
+      addEntry(str1, str2);
       return;
     }
 
-    for (let key in obj) {
-      first = first.replace(key, obj[key]);
-    }
+    return createString(str1);
+  }
 
-    return first;
-  };
+  function createString(str1) {
+    return rules.reduce(applyRule, str1);
+  }
+
+  function applyRule(string, [replace, toMatch]) {
+    return string.replace(toMatch, replace);
+  }
+
+  function addEntry(replace, toMatch) {
+    rules.push([replace, toMatch]);
+  }
+  //   if (second != null) {
+  //     obj[first] = second;
+  //     return;
+  //   }
+
+  //   for (let key in obj) {
+  //     first = first.replace(key, obj[key]);
+  //   }
+
+  //   return first;
+  // };
 }
 
 // /*** Uncomment these to check your work! ***/
 const changeScene = censor();
 changeScene("dogs", "cats");
 changeScene("quick", "slow");
-console.log(changeScene("The quick, brown fox jumps over the lazy dogs.")); // => should log 'The slow, brown fox jumps over the lazy cats.'
+changeScene("blue", "brown");
+console.log(changeScene("The quick, brown fox jumps over the lazy dogs."));
+// => should log 'The slow, brown fox jumps over the lazy cats.'
 
 // CHALLENGE 13
 function createSecretHolder(secret) {}
