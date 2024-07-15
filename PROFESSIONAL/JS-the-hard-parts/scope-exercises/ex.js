@@ -178,8 +178,6 @@ function cycleIterator(array) {
   var iterator = 0;
   var lastIndex = array.length - 1;
 
-  console.log(lastIndex);
-
   return cycle;
 
   function cycle() {
@@ -187,11 +185,11 @@ function cycleIterator(array) {
       iterator = 0;
     }
 
-    var el = array[iterator];
+    var element = array[iterator];
 
     iterator++;
 
-    return el;
+    return element;
   }
 }
 
@@ -205,14 +203,26 @@ console.log(getDay()); // => should log 'Fri'
 console.log(getDay());
 console.log(getDay());
 // CHALLENGE 10
-function defineFirstArg(func, arg) {}
+/* Create a function defineFirstArg that accepts a function and an argument. Also, the function being passed in will accept at least one argument. defineFirstArg will return a new function that invokes the passed-in function with the passed-in argument as the passed-in function's first argument. Additional arguments needed by the passed-in function will need to be passed into the returned function. */
+function defineFirstArg(func, arg) {
+  var firstArg = arg;
+
+  function freezeFirstArg(num) {
+    return func(firstArg, num);
+  }
+
+  return freezeFirstArg;
+}
 
 // /*** Uncomment these to check your work! ***/
-// const subtract = function(big, small) { return big - small; };
-// const subFrom20 = defineFirstArg(subtract, 20);
-// console.log(subFrom20(5)); // => should log 15
+const subtract = function (big, small) {
+  return big - small;
+};
+const subFrom20 = defineFirstArg(subtract, 20);
+console.log(subFrom20(5)); // => should log 15
 
 // CHALLENGE 11
+/* Create a function dateStamp that accepts a function and returns a function. The returned function will accept however many arguments the passed-in function accepts, and return an object with a date key that contains a timestamp with the time of invocation, and an output key that contains the result from invoking the passed-in function. HINT: You may need to research how to access information on Date objects. */
 function dateStamp(func) {}
 
 // /*** Uncomment these to check your work! ***/
@@ -268,61 +278,135 @@ console.log(changeScene("The quick, brown fox jumps over the lazy dogs."));
 // => should log 'The slow, brown fox jumps over the lazy cats.'
 
 // CHALLENGE 13
-function createSecretHolder(secret) {}
+/* There's no such thing as private properties on a JavaScript object! But, maybe there are? Implement a function createSecretHolder(secret) which accepts any value as secret and returns an object with ONLY two methods. getSecret() which returns the secret setSecret() which sets the secret */
+function createSecretHolder(secret) {
+  var secretProp = secret;
+
+  function getSecret() {
+    return secretProp;
+  }
+
+  function setSecret(value) {
+    secretProp = value;
+  }
+
+  var objWithSecret = {
+    getSecret,
+    setSecret,
+  };
+
+  return objWithSecret;
+}
 
 // /*** Uncomment these to check your work! ***/
-// obj = createSecretHolder(5)
-// obj.getSecret() // => returns 5
-// obj.setSecret(2)
-// obj.getSecret() // => returns 2
+obj = createSecretHolder(5);
+console.log(obj.getSecret()); // => returns 5
+obj.setSecret(2);
+console.log(obj.getSecret()); // => returns 2
 
 // CHALLENGE 14
-function callTimes() {}
+/* Write a function, callTimes, that returns a new function. The new function should return the number of times it’s been called. */
+function callTimes() {
+  var callsCounter = 0;
+
+  return function () {
+    return ++callsCounter;
+  };
+}
 
 // /*** Uncomment these to check your work! ***/
-// let myNewFunc1 = callTimes();
-// let myNewFunc2 = callTimes();
-// myNewFunc1(); // => 1
-// myNewFunc1(); // => 2
-// myNewFunc2(); // => 1
-// myNewFunc2(); // => 2
+let myNewFunc1 = callTimes();
+let myNewFunc2 = callTimes();
+console.log(myNewFunc1()); // => 1
+console.log(myNewFunc1()); // => 2
+console.log(myNewFunc2()); // => 1
+console.log(myNewFunc2()); // => 2
 
+/* Create a function roulette that accepts a number (let us call it n), and returns a function. The returned function will take no arguments, and will return the string 'spin' the first n - 1 number of times it is invoked. On the very next invocation (the nth invocation), the returned function will return the string 'win'. On every invocation after that, the returned function returns the string 'pick a number to play again'. */
 // CHALLENGE 15
-function roulette(num) {}
+function roulette(num) {
+  if (isNaN(num)) return;
+
+  var callsCounter = 0;
+
+  return function () {
+    callsCounter++;
+    if (callsCounter < num) {
+      return "spin";
+    } else if (num == callsCounter) {
+      return "win";
+    } else {
+      return "pick a number to play again";
+    }
+  };
+}
 
 // /*** Uncomment these to check your work! ***/
-// const play = roulette(3);
-// console.log(play()); // => should log 'spin'
-// console.log(play()); // => should log 'spin'
-// console.log(play()); // => should log 'win'
-// console.log(play()); // => should log 'pick a number to play again'
-// console.log(play()); // => should log 'pick a number to play again'
+const play = roulette(3);
+console.log(play()); // => should log 'spin'
+console.log(play()); // => should log 'spin'
+console.log(play()); // => should log 'win'
+console.log(play()); // => should log 'pick a number to play again'
+console.log(play()); // => should log 'pick a number to play again'
 
 // CHALLENGE 16
-function average() {}
+/* Create a function average that accepts no arguments, and returns a function (that will accept either a number as its lone argument, or no arguments at all). When the returned function is invoked with a number, the output should be average of all the numbers have ever been passed into that function (duplicate numbers count just like any other number). When the returned function is invoked with no arguments, the current average is outputted. If the returned function is invoked with no arguments before any numbers are passed in, then it should return 0. */
+function average() {
+  var nums = [];
+
+  function accInputs(num) {
+    var isValidNumber = !Number.isNaN(parseFloat(num));
+
+    if (!num && !nums.length) return 0;
+
+    if (isValidNumber) {
+      nums.push(num);
+    }
+
+    return nums.reduce(calculateAverage, 0) / nums.length;
+  }
+
+  function calculateAverage(acc, curr) {
+    return acc + curr;
+  }
+
+  return accInputs;
+}
 
 // /*** Uncomment these to check your work! ***/
-// const avgSoFar = average();
-// console.log(avgSoFar()); // => should log 0
-// console.log(avgSoFar(4)); // => should log 4
-// console.log(avgSoFar(8)); // => should log 6
-// console.log(avgSoFar()); // => should log 6
-// console.log(avgSoFar(12)); // => should log 8
-// console.log(avgSoFar()); // => should log 8
+const avgSoFar = average();
+console.log(avgSoFar()); // => should log 0
+console.log(avgSoFar(4)); // => should log 4
+console.log(avgSoFar(8)); // => should log 6
+console.log(avgSoFar()); // => should log 6
+console.log(avgSoFar(12)); // => should log 8
+console.log(avgSoFar()); // => should log 8
 
 // CHALLENGE 17
-function makeFuncTester(arrOfTests) {}
+/* Create a function makeFuncTester that accepts an array (of two-element sub-arrays), and returns a function (that will accept a callback). The returned function should return true if the first elements (of each sub-array) being passed into the callback all yield the corresponding second elements (of the same sub-array). Otherwise, the returned function should return false. */
+function makeFuncTester(arrOfTests) {
+  return testCallback;
+
+  function testCallback(cb) {
+    var allTestPass = arrOfTests.every(function passTest(test) {
+      var [input, output] = test;
+      return cb(input) === output;
+    });
+
+    return allTestPass;
+  }
+}
 
 // /*** Uncomment these to check your work! ***/
-// const capLastTestCases = [];
-// capLastTestCases.push(['hello', 'hellO']);
-// capLastTestCases.push(['goodbye', 'goodbyE']);
-// capLastTestCases.push(['howdy', 'howdY']);
-// const shouldCapitalizeLast = makeFuncTester(capLastTestCases);
-// const capLastAttempt1 = str => str.toUpperCase();
-// const capLastAttempt2 = str => str.slice(0, -1) + str.slice(-1).toUpperCase();
-// console.log(shouldCapitalizeLast(capLastAttempt1)); // => should log false
-// console.log(shouldCapitalizeLast(capLastAttempt2)); // => should log true
+const capLastTestCases = [];
+capLastTestCases.push(["hello", "hellO"]);
+capLastTestCases.push(["goodbye", "goodbyE"]);
+capLastTestCases.push(["howdy", "howdY"]);
+const shouldCapitalizeLast = makeFuncTester(capLastTestCases);
+const capLastAttempt1 = (str) => str.toUpperCase();
+const capLastAttempt2 = (str) => str.slice(0, -1) + str.slice(-1).toUpperCase();
+console.log(shouldCapitalizeLast(capLastAttempt1)); // => should log false
+console.log(shouldCapitalizeLast(capLastAttempt2)); // => should log true
 
 // CHALLENGE 18
 function makeHistory(limit) {}
