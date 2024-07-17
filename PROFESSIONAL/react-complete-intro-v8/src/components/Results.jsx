@@ -1,7 +1,6 @@
 import Pet from "./Pet";
 
 function Results({ pets }) {
-  console.log(pets);
   function renderPet(pet) {
     return (
       <Pet
@@ -11,6 +10,7 @@ function Results({ pets }) {
         images={pet.images}
         breed={pet.breed}
         key={pet.id}
+        id={pet.id}
       />
     );
   }
