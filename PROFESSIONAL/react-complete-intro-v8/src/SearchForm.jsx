@@ -1,27 +1,18 @@
+import Results from "./Results";
+import Form from "./Form";
 import { useState } from "react";
 
-// let counter = 0;
 function SearchForm() {
-  const [location, setLocation] = useState("");
-  //   counter++;
+  const [pets, setPets] = useState([]);
+
+  function onUpdatePets(pets) {
+    setPets(pets);
+  }
+
   return (
     <div className="search-params">
-      <form>
-        {/* <h1>{counter}</h1> */}
-        <label htmlFor="location">
-          Location
-          <input
-            onChange={(e) => {
-              setLocation(e.target.value);
-            }}
-            value={location}
-            type="text"
-            name="location"
-            id="location"
-            placeholder="Location"
-          />
-        </label>
-      </form>
+      <Form onUpdatePets={onUpdatePets} />
+      <Results pets={pets} />
     </div>
   );
 }
