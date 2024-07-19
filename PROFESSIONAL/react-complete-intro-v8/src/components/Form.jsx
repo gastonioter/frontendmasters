@@ -1,47 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useBreedList from "../hooks/useBreedList";
 
 var ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
-function Form({ onUpdatePets }) {
-  const [location, setLocation] = useState("Salt Lake City");
-  const [animal, setAnimal] = useState();
-  const [breed, setBreed] = useState();
+function Form({ onSubmit }) {
+  const [animal, setAnimal] = useState("dog");
   const [breedList, status] = useBreedList(animal);
 
-  useEffect(function () {
-    requestPets();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function requestPets() {
-    var res =
-      await fetch(`https://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}
-  `);
-
-    var json = await res.json();
-
-    onUpdatePets(json.pets);
-  }
-
-  function onSubmit(e) {
+  function handleSumbit(e) {
     e.preventDefault();
-    requestPets();
-  }
+    const newParams = {
+      animal: e.target.animal.value,
+      breed: e.target.breed.value,
+      location: e.target.location.value,
+    };
 
-  function onSelectedAnimal(e) {
-    setAnimal(e.target.value);
-    setBreed("");
+    onSubmit(newParams);
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSumbit}>
       <label htmlFor="location">
         Location
         <input
-          onChange={(e) => {
-            setLocation(e.target.value);
-          }}
-          value={location}
           type="text"
           name="location"
           id="location"
@@ -54,12 +35,13 @@ function Form({ onUpdatePets }) {
         <select
           name="animal"
           id="animal"
-          onChange={onSelectedAnimal}
+          onChange={(e) => setAnimal(e.target.value)}
           value={animal}
+          defaultValue={animal}
         >
           {ANIMALS.map(function renderAnimalOp(animal) {
             return (
-              <option value={animal} key={animal} selected={animal == "dog"}>
+              <option value={animal} key={animal}>
                 {animal}
               </option>
             );
@@ -69,15 +51,7 @@ function Form({ onUpdatePets }) {
 
       <label htmlFor="breed">
         Breeds
-        <select
-          disabled={status == "unloaded"}
-          name="breed"
-          id="breed"
-          onChange={(e) => {
-            setBreed(e.target.value);
-          }}
-          value={breed}
-        >
+        <select disabled={status == "unloaded"} name="breed" id="breed">
           <option />
           {breedList.map(function renderBreed(breed) {
             return (
