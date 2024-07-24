@@ -1,10 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import SearchForm from "./components/SearchForm";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Details from "./pages/Details";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import SearchForm from "./components/SearchForm";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -24,6 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
+        
         <header>
           <Link to="/">AdoptMe</Link>
         </header>

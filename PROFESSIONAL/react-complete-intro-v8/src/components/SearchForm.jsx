@@ -16,7 +16,6 @@ function SearchForm() {
   const pets = petsPromise?.data?.pets ?? [];
 
   function updateParams(params) {
-    console.log(params);
     setRequestParams(params);
   }
 
